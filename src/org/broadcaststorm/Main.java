@@ -94,7 +94,8 @@ public class Main {
                 }
 
                 Datapage datapage = Datapage.create(container, datapage_doc);
-                songs.addAll(datapage.getSongs());
+                List<Song> local_songs = datapage.getSongs();
+                if (local_songs != null) songs.addAll(local_songs);
             }
         }
 
