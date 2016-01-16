@@ -31,11 +31,10 @@ public class Editionpage extends Datapage{
         }
         String titlesum = infodiv.text();
         String[] titles=titlesum.split("\n");
-        String[][] info;
-        for(int i=0;i<titles.length;i++){
-            info[i]=titles[i].split(" - ");
+        String[][] info=new String[titles.length][];
+        for(int i=0;i<titles.length;i++) {
+            info[i] = titles[i].split(" - ");
         }
-
         Elements links= website.getElementsByAttributeValue("target", "_blank");
         ArrayList<String> linkstrings = new ArrayList<String>();
         for (Element link : links) {
