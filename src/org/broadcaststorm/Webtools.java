@@ -16,4 +16,13 @@ public class Webtools {
         }
         return baseurl;
     }
+
+    public static int parseInt(String numberString) {
+        try {
+            return Integer.parseInt(numberString);
+        }
+        catch (NumberFormatException e){
+            return -1;
+        }
+    }
 }

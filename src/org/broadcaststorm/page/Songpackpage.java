@@ -14,7 +14,7 @@ public class Songpackpage extends Datapage{
     }
 
     @Override
-    List<Song> getSongs() {
+    public List<Song> getSongs() {
         return null;
     }
 }
