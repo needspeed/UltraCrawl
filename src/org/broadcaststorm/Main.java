@@ -26,12 +26,15 @@ public class Main {
             params.put(section_selector, section);
             String page_link = Webtools.UrlBuilder(baselink, params);
             Document page = null;
+
+            System.out.println("Starting section:" + section + " page download");
             try {
                 page = Jsoup.connect(page_link).get();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
+            System.out.println("Counting Pages");
             //Get Pagecount ----------------------------------------------------
             Element table = getTable(page);
             Element table_head = table.getElementsByClass("big").first();
@@ -50,6 +53,7 @@ public class Main {
                 }
             }
 
+            System.out.println("Start getting links");
             //Get Songlinks ---------------------------------------------------
             List<String> song_links_section = new ArrayList<>();
             for (Integer i : pages) {
@@ -82,6 +86,7 @@ public class Main {
             songs_links.put(container, song_links_section);
         }
 
+        System.out.println("Start downloading detail pages");
         //Build Songs -----------------------------------------------------
         List<Song> songs = new ArrayList<>();
         for (SongContainer container : songs_links.keySet()) {
@@ -99,6 +104,7 @@ public class Main {
             }
         }
 
+        System.out.println("Query output: ----------------------");
         //Query Songs ---------------------------------------------------------
         for (Song song : songs) {
             System.out.println(song.artist + " - " + song.title + " :[0] " + song.links.get(0));
