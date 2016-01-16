@@ -6,7 +6,7 @@ package org.broadcaststorm;
 public class DownloadLink {
     public String url;
     public String portal;
-    public DownloadLink(String URL, String Portal){
+    public DownloadLink(String url, String portal){
         this.url=url;
         this.portal=portal;
     }
