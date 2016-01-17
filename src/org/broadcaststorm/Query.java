@@ -4,6 +4,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,9 +36,24 @@ public class Query {
     public static void secondQuery(List<Song> songs) {
         System.out.println("Song count: " + songs.size());
         //songs.forEach(s -> System.out.println(s.artist + " - " + s.title));
-        //List<Song> metal = songs.stream().filter(song -> song.genre.contains("Metal")).collect(Collectors.toList());
-        //System.out.println("Metal Count: " + metal.size());
+        List<Song> metal = songs.stream().filter(song -> song.genre.contains("Metal")).collect(Collectors.toList());
+        System.out.println("Metal Count: " + metal.size());
         //metal.forEach(s -> System.out.println(s.artist + " - " +s.title));
+        List<String> urls = songs.stream().map(Query::songUrl).collect(Collectors.toList());
+        List<String> metal_urls = metal.stream().map(Query::songUrl).collect(Collectors.toList());
+
+        Path file = Paths.get("/tmp/urls.txt");
+        Path metal_file = Paths.get("/tmp/metal_urls.txt");
+        try {
+            Files.write(file, urls, Charset.forName("UTF-8"));
+            Files.write(metal_file, metal_urls, Charset.forName("UTF-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String songUrl(Song s) {
+        return s.links.get(0).url;
     }
 
     private static void removeNonUlLinks(List<Song> songs) {
