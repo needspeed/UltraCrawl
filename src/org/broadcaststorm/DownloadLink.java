@@ -10,4 +10,9 @@ public class DownloadLink {
         this.url=url;
         this.portal=portal;
     }
+
+    public DownloadLink(String url) {
+        this.url = url;
+        this.portal = url.replaceFirst("http://","").split("/")[0];
+    }
 }
