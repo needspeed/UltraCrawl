@@ -60,7 +60,7 @@ public class Webtools {
         return map.keySet().stream()
                 .filter(key -> key.startsWith("Download"))
                 .map(map::get)
-                .map(s -> s.replaceFirst("http://dontknow.me/at/[?]", ""))
+                .map(s -> s.replaceFirst("http://dontknow.me/at/\\?", ""))
                 .map(DownloadLink::new).collect(Collectors.toList());
     }
 }
