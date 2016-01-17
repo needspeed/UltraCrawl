@@ -7,25 +7,25 @@ import java.util.List;
  * Created by needspeed on 1/17/16.
  */
 public class Serializer {
-    public static void serialize(List<Song> songslist) {
+    public static void serialize(List<Song> songslist, String name) {
         try {
-            FileOutputStream fileOut = new FileOutputStream("/tmp/songs.ser");
+            FileOutputStream fileOut = new FileOutputStream("/tmp/"+name+".ser");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(songslist);
             out.close();
             fileOut.close();
-            System.out.printf("Serialized data is saved in /tmp/songs.ser");
+            System.out.printf("Serialized data is saved in /tmp/"+name+".ser");
         }
         catch(IOException i) {
               i.printStackTrace();
         }
     }
 
-    public static List<Song> deserialize() {
+    public static List<Song> deserialize(String name) {
         List<Song> out = null;
 
        try {
-           FileInputStream fileIn = new FileInputStream("/tmp/songs.ser");
+           FileInputStream fileIn = new FileInputStream("/tmp/"+name+".ser");
            ObjectInputStream in = new ObjectInputStream(fileIn);
            out = (List<Song>) in.readObject();
            in.close();

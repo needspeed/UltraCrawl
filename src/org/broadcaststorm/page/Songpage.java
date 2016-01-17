@@ -31,7 +31,7 @@ public class Songpage extends Datapage{
         String title = title_str[0];
         String artist = title_str[1];
 
-        System.out.println("Found song: " + artist + " --- " + title);
+        //System.out.println("Found song: " + artist + " --- " + title);
 
         Element table = website.getElementsByClass("table_back").first();
         Element body = table.getElementsByTag("tbody").get(1);

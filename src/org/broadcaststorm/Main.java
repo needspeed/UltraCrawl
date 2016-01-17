@@ -9,6 +9,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.*;
 
 public class Main {
@@ -55,8 +56,8 @@ public class Main {
                 }
 
                 //DEBUG
-                int first = pages.get(0);
-                pages.clear(); pages.add(first);
+                //if (pages.size() > 5)
+                //    pages = pages.subList(0, 5);
 
                 System.out.println("Start getting links");
                 //Get Songlinks ---------------------------------------------------
@@ -97,25 +98,31 @@ public class Main {
             //Build Songs -----------------------------------------------------
             for (SongContainer container : songs_links.keySet()) {
                 songs_links.get(container).parallelStream()
-                        .map(Jsoup::connect).map(Main::getDocument)
+                        .map(Jsoup::connect).map(Main::getDocument).filter(x -> x != null)
                         .map((Document x) -> Datapage.create(container, x))
                         .map(Datapage::getSongs)
                         .forEach(songs::addAll);
             }
 
             System.out.println("Serializing Results");
-            Serializer.serialize(songs);
+            Serializer.serialize(songs, "prequeried");
+
+            List<Song> cleaned = Query.firstQuery(songs);
+            Serializer.serialize(cleaned, "cleaned");
+        }
+        else if (args.length == 1) {
+            songs = Serializer.deserialize("prequeried");
+            List<Song> cleaned = Query.firstQuery(songs);
+
+            Serializer.serialize(cleaned, "cleaned");
         }
         else {
             System.out.println("Deserializing Songs");
-            songs = Serializer.deserialize();
-        }
+            songs = Serializer.deserialize("cleaned");
 
-        System.out.println("Query output: ----------------------");
-        //Query Songs ---------------------------------------------------------
-        for (Song song : songs) {
-            System.out.println(song.artist + " - " + song.title + " :[0] " + (
-                    (song.links != null && song.links.size() > 0) ? song.links.get(0).url : "No link"));
+            if (songs == null) return;
+            System.out.println("Query output: ----------------------");
+            Query.secondQuery(songs);
         }
     }
 
@@ -128,7 +135,6 @@ public class Main {
             return c.get();
         }
         catch (IOException e) {
-            e.printStackTrace();
             return null;
         }
     }

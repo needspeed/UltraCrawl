@@ -28,6 +28,6 @@ public abstract class Datapage {
             case EDITION:
                 return new Editionpage(document);
         }
-        return null;
+        throw new IllegalArgumentException();
     }
 }
