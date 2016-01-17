@@ -2,16 +2,14 @@ package org.broadcaststorm;
 
 import org.broadcaststorm.page.Datapage;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Main {
 
@@ -90,28 +88,32 @@ public class Main {
         //Build Songs -----------------------------------------------------
         List<Song> songs = new ArrayList<>();
         for (SongContainer container : songs_links.keySet()) {
-            for (String song_link : songs_links.get(container)) {
-                Document datapage_doc = null;
-                try {
-                    datapage_doc = Jsoup.connect(song_link).get();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                Datapage datapage = Datapage.create(container, datapage_doc);
-                List<Song> local_songs = datapage.getSongs();
-                if (local_songs != null) songs.addAll(local_songs);
-            }
+            songs_links.get(container).parallelStream()
+                    .map(Jsoup::connect).map(Main::getDocument)
+                    .map((Document x) -> Datapage.create(container, x))
+                    .map(Datapage::getSongs)
+                    .forEach(songs::addAll);
         }
 
         System.out.println("Query output: ----------------------");
         //Query Songs ---------------------------------------------------------
         for (Song song : songs) {
-            System.out.println(song.artist + " - " + song.title + " :[0] " + song.links.get(0));
+            System.out.println(song.artist + " - " + song.title + " :[0] " + (
+                    (song.links != null && song.links.size() > 0) ? song.links.get(0) : "No link"));
         }
     }
 
     private static Element getTable(Document root) {
         return root.getElementsByClass("table_back").first();
+    }
+
+    private static Document getDocument(Connection c) {
+        try {
+            return c.get();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

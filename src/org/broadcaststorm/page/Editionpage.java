@@ -22,6 +22,9 @@ public class Editionpage extends Datapage{
     }
     @Override
     public List<Song> getSongs() {
+        return new ArrayList<>();
+
+        /*
         Elements infodivs = website.getElementsByAttributeValue("style", "width:100%px;overflow:auto;");
         Element infodiv = null;
         for (Element tempinfodiv : infodivs) {
@@ -64,6 +67,6 @@ public class Editionpage extends Datapage{
         }
 
 
-        return songList;
+        return songList;*/
     }
 }

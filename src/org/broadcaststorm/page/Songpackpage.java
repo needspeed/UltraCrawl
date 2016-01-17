@@ -3,6 +3,7 @@ package org.broadcaststorm.page;
 import org.broadcaststorm.Song;
 import org.jsoup.nodes.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,6 +16,6 @@ public class Songpackpage extends Datapage{
 
     @Override
     public List<Song> getSongs() {
-        return null;
+        return new ArrayList<>();
     }
 }
