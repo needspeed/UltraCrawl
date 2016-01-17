@@ -1,11 +1,12 @@
 package org.broadcaststorm;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by needspeed on 1/16/16.
  */
-public class Song {
+public class Song implements Serializable{
     SongContainer container;
     List<DownloadLink> links;
     String artist, title, genre;
